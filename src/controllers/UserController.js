@@ -13,8 +13,12 @@ class UserController {
   async show(req, res) {
     try {
       const user = await User.findByPk(req.params.id);
-      const { id, nome, email } = user;
-      return res.json({ id, nome, email });
+      const {
+        id, name, email, profile,
+      } = user;
+      return res.json({
+        id, name, email, profile,
+      });
     } catch (e) {
       return res.json(null);
     }
@@ -34,14 +38,20 @@ class UserController {
 
   async update(req, res) {
     try {
-      const user = await User.findByPk(req.userId);
+      const userId = req.params.id;
+      if (!userId) {
+        return res.status(400).json({
+          errors: ['Usuário não existe'],
+        });
+      }
+      const user = await User.findByPk(userId);
       if (!user) {
         return res.status(400).json({
           errors: ['Usuário não existe'],
         });
       }
 
-      const novosDados = await user.update(req.body);
+      const novosDados = await User.update(req.body);
       const { id, nome, email } = novosDados;
       return res.json({ id, nome, email });
     } catch (e) {
@@ -53,7 +63,7 @@ class UserController {
 
   async delete(req, res) {
     try {
-      const user = await User.findByPk(req.userId);
+      const user = await User.findByPk(req.params.id);
       if (!user) {
         return res.status(400).json({
           errors: ['Usuário não existe'],
