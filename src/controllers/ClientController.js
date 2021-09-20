@@ -1,27 +1,24 @@
 import Client from '../models/Client';
-import Product from '../models/Product';
+// import Product from '../models/Product';
 
 class ClientController {
   async index(req, res) {
-    const clients = await Client.findAll({
-      attributes: ['id', 'nome', 'sobrenome', 'email', 'idade'],
-      order: [['id', 'DESC'], [Product, 'id', 'DESC']],
-      include: {
-        model: Product,
-        attributes: ['id', 'url', 'filename'],
-      },
-    });
-    res.json(clients);
+    try {
+      const clients = await Client.findAll();
+      return res.json(clients);
+    } catch (e) {
+      return res.json(null);
+    }
   }
 
   async store(req, res) {
     try {
       const client = await Client.create(req.body);
       const {
-        id, nome, email, idade,
+        id, name, email,
       } = await client;
       return res.json({
-        id, nome, email, idade,
+        id, name, email,
       });
     } catch (e) {
       return res.status(400).json({
@@ -40,17 +37,10 @@ class ClientController {
           errors: ['Id não enviado'],
         });
       }
-      const client = await Client.findByPk(id, {
-        attributes: ['id', 'nome', 'sobrenome', 'email', 'idade'],
-        order: [['id', 'DESC'], [Product, 'id', 'DESC']],
-        include: {
-          model: Product,
-          attributes: ['id', 'url', 'filename'],
-        },
-      });
+      const client = await Client.findByPk(id);
       if (!client) {
         return res.status(400).json({
-          errors: ['Client não existe'],
+          errors: ['Cliente não existe'],
         });
       }
       return res.json(client);
@@ -100,7 +90,7 @@ class ClientController {
           errors: ['Client não existe'],
         });
       }
-      const clientAtualizado = await Client.update(req.body);
+      const clientAtualizado = await client.update(req.body);
       const {
         id, nome, email, idade,
       } = clientAtualizado;
