@@ -39,6 +39,8 @@ class UserController {
   async update(req, res) {
     try {
       const userId = req.params.id;
+      console.log(userId);
+
       if (!userId) {
         return res.status(400).json({
           errors: ['Usuário não existe'],
@@ -50,8 +52,7 @@ class UserController {
           errors: ['Usuário não existe'],
         });
       }
-
-      const novosDados = await User.update(req.body);
+      const novosDados = await user.update(req.body);
       const { id, nome, email } = novosDados;
       return res.json({ id, nome, email });
     } catch (e) {

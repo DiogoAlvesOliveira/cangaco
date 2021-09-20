@@ -100,7 +100,7 @@ class ClientController {
           errors: ['Client não existe'],
         });
       }
-      const clientAtualizado = await client.update(req.body);
+      const clientAtualizado = await Client.update(req.body);
       const {
         id, nome, email, idade,
       } = clientAtualizado;
