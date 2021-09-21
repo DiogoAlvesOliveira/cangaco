@@ -1,17 +1,14 @@
 import Saller from '../models/Saller';
-import Product from '../models/Product';
+// import Product from '../models/Product';
 
 class SallerController {
   async index(req, res) {
-    const sallers = await Saller.findAll({
-      attributes: ['id', 'nome', 'sobrenome', 'email', 'idade'],
-      order: [['id', 'DESC'], [Product, 'id', 'DESC']],
-      include: {
-        model: Product,
-        attributes: ['id', 'url', 'filename'],
-      },
-    });
-    res.json(sallers);
+    try {
+      const sallers = await Saller.findAll();
+      return res.json(sallers);
+    } catch (e) {
+      return res.json(null);
+    }
   }
 
   async store(req, res) {
@@ -40,14 +37,7 @@ class SallerController {
           errors: ['Id não enviado'],
         });
       }
-      const saller = await Saller.findByPk(id, {
-        attributes: ['id', 'nome', 'sobrenome', 'email', 'idade'],
-        order: [['id', 'DESC'], [Product, 'id', 'DESC']],
-        include: {
-          model: Product,
-          attributes: ['id', 'url', 'filename'],
-        },
-      });
+      const saller = await Saller.findByPk(id);
       if (!saller) {
         return res.status(400).json({
           errors: ['Saller não existe'],
