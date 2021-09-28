@@ -21,8 +21,8 @@ export default class Provider extends Model {
         },
         validate: {
           len: {
-            args: [14, 18],
-            msg: 'Campo CNPJ deve ter entre 14 e 18 caracteres',
+            args: [14, 19],
+            msg: 'Campo CNPJ deve ter entre 14 e 19 caracteres',
           },
         },
       },
