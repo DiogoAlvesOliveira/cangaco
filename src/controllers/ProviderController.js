@@ -1,9 +1,16 @@
 import Provider from '../models/Provider';
-// import Product from '../models/Product';
+import Product from '../models/Product';
 
 class ProviderController {
   async index(req, res) {
-    const providers = await Provider.findAll();
+    const providers = await Provider.findAll({
+      attributes: ['id', 'name', 'cnpj'],
+      order: [['id', 'DESC'], [Product, 'id', 'DESC']],
+      include: {
+        model: Product,
+        attributes: ['id', 'name', 'barcode', 'amount'],
+      },
+    });
     res.json(providers);
   }
 
@@ -33,7 +40,14 @@ class ProviderController {
           errors: ['Id não enviado'],
         });
       }
-      const provider = await Provider.findByPk(id);
+      const provider = await Provider.findByPk(id, {
+        attributes: ['id', 'name', 'cnpj'],
+        order: [['id', 'DESC'], [Product, 'id', 'DESC']],
+        include: {
+          model: Product,
+          attributes: ['id', 'name', 'barcode', 'amount'],
+        },
+      });
       if (!provider) {
         return res.status(400).json({
           errors: ['Provider não existe'],
