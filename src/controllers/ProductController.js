@@ -3,14 +3,7 @@ import Product from '../models/Product';
 
 class ProductController {
   async index(req, res) {
-    const products = await Product.findAll(/* {
-      attributes: ['id', 'nome', 'sobrenome', 'email', 'idade'],
-      order: [['id', 'DESC'], [Provider, 'id', 'DESC']],
-      include: {
-        model: Provider,
-        attributes: ['id', 'name'],
-      },
-    } */);
+    const products = await Product.findAll();
     res.json(products);
   }
 
@@ -38,14 +31,7 @@ class ProductController {
           errors: ['Id não enviado'],
         });
       }
-      const product = await Product.findByPk(id, /* , {
-        attributes: ['id', 'nome', 'sobrenome', 'email', 'idade'],
-        order: [['id', 'DESC'], [Provider, 'id', 'DESC']],
-        include: {
-          model: Provider,
-          attributes: ['id', 'name'],
-        },
-      } */);
+      const product = await Product.findByPk(id);
       if (!product) {
         return res.status(400).json({
           errors: ['Product não existe'],
